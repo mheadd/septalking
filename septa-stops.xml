@@ -1,0 +1,516 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<grammar xmlns="http://www.w3.org/2001/06/grammar" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.w3.org/2001/06/grammar http://www.w3.org/TR/speech-grammar/grammar.xsd"
+	version="1.0" xml:lang="en-US" mode="voice" root="main">
+
+	<rule id="main">
+		<one-of>
+			<item>
+				<item>thirtieth street</item>
+				<item repeat="0-">station</item>
+				<tag>30th Street Station</tag>
+			</item>
+			<item>
+				forty ninth street
+				<tag>49th St</tag>
+			</item>
+			<item>airport terminal a
+				<tag>Airport Terminal A</tag>
+			</item>
+			<item>airport terminal b
+				<tag>Airport Terminal B</tag>
+			</item>
+			<item>airport terminal c
+				<tag>Airport Terminal C-D</tag>
+			</item>
+			<item>airport terminal d
+				<tag>Airport Terminal C-D</tag>
+			</item>
+			<item>airport terminal e
+				<tag>Airport Terminal E-F</tag>
+			</item>
+			<item>airport terminal f
+				<tag>Airport Terminal E-F</tag>
+			</item>
+			<item>allegheny
+				<tag>Allegheny</tag>
+			</item>
+			<item>allen lane
+				<tag>Allen Lane</tag>
+			</item>
+			<item>ambler
+				<tag>Ambler</tag>
+			</item>
+			<item>angora
+				<tag>Angora</tag>
+			</item>
+			<item>ardmore
+				<tag>Ardmore</tag>
+			</item>
+			<item>ardsley
+				<tag>Ardsley</tag>
+			</item>
+			<item>bala
+				<tag>Bala</tag>
+			</item>
+			<item>berwin
+				<tag>Berwyn</tag>
+			</item>
+			<item>betharies
+				<tag>Bethayres</tag>
+			</item>
+			<item>bridesburg
+				<tag>Bridesburg</tag>
+			</item>
+			<item>bristol
+				<tag>Bristol</tag>
+			</item>
+			<item>brin mar
+				<tag>Bryn Mawr</tag>
+			</item>
+			<item>carpenter
+				<tag>Carpenter</tag>
+			</item>
+			<item>chalfont
+				<tag>Chalfont</tag>
+			</item>
+			<item>
+				<item>chelton</item>
+				<one-of>
+					<item>avenue</item>
+					<item>ave</item>
+				</one-of>
+				<tag>Chelten Avenue</tag>
+			</item>
+			<item>cheltonham
+				<tag>Cheltenham</tag>
+			</item>
+			<item>
+				<one-of>
+					<item>chester</item>
+					<item repeat="0-">tranportation center</item>
+				</one-of>
+				<tag>Chester TC</tag>
+			</item>
+			<item>chestnut hill east
+				<tag>Chestnut Hill East</tag>
+			</item>
+			<item>chestnut hill west
+				<tag>Chestnut Hill West</tag>
+			</item>
+			<item>churchmans crossing
+				<tag>Churchmans Crossing</tag>
+			</item>
+			<item>claymont
+				<tag>Claymont</tag>
+			</item>
+			<item>clifton aldan
+				<tag>Clifton-Aldan</tag>
+			</item>
+			<item>colmar
+				<tag>Colmar</tag>
+			</item>
+			<item>conshahawken
+				<tag>Conshohocken</tag>
+			</item>
+			<item>cornwells heights
+				<tag>Cornwells Heights</tag>
+			</item>
+			<item>crestmont
+				<tag>Crestmont</tag>
+			</item>
+			<item>croydon
+				<tag>Croydon</tag>
+			</item>
+			<item>crum lin
+				<tag>Crum Lynne</tag>
+			</item>
+			<item>curtis park
+				<tag>Curtis Park</tag>
+			</item>
+			<item>kinwid
+				<tag>Cynwyd</tag>
+			</item>
+			<item>dalesford
+				<tag>Daylesford</tag>
+			</item>
+			<item>dardy
+				<tag>Darby</tag>
+			</item>
+			<item>delaware valley college
+				<tag>Delaware Valley College</tag>
+			</item>
+			<item>devon
+				<tag>Devon</tag>
+			</item>
+			<item>downingtown
+				<tag>Downingtown</tag>
+			</item>
+			<item>doylestown
+				<tag>Doylestown</tag>
+			</item>
+			<item>east fals
+				<tag>East Falls</tag>
+			</item>
+			<item>
+				<item>eastwick</item>
+				<item repeat="0-">station</item>
+				<tag>Eastwick Station</tag>
+			</item>
+			<item>eddington
+				<tag>Eddington</tag>
+			</item>
+			<item>eddystone
+				<tag>Eddystone</tag>
+			</item>
+			<item>elkins park
+				<tag>Elkins Park</tag>
+			</item>
+			<item>elm street
+				<tag>Elm St</tag>
+			</item>
+			<item>
+				<item>elwin</item>
+				<item repeat="0-">station</item>
+				<tag>Elwyn Station</tag>
+			</item>
+			<item>exten
+				<tag>Exton</tag>
+			</item>
+			<item>
+				<one-of>
+					<item>fern rock</item>
+					<item repeat="0-">tranportation center</item>
+				</one-of>
+			</item>
+			<item>fernwood
+				<tag>Fernwood</tag>
+			</item>
+			<item>folcroft
+				<tag>Folcroft</tag>
+			</item>
+			<item>forest hills
+				<tag>Forest Hills</tag>
+			</item>
+			<item>fort washington
+				<tag>Ft Washington</tag>
+			</item>
+			<item>fortuna
+				<tag>Fortuna</tag>
+			</item>
+			<item>fox chase
+				<tag>Fox Chase</tag>
+			</item>
+			<item>germantown
+				<tag>Germantown</tag>
+			</item>
+			<item>gladstone
+				<tag>Gladstone</tag>
+			</item>
+			<item>glenolden
+				<tag>Glenolden</tag>
+			</item>
+			<item>glenside
+				<tag>Glenside</tag>
+			</item>
+			<item>gravers
+				<tag>Gravers</tag>
+			</item>
+			<item>gwened
+				<tag>Gwynedd Valley</tag>
+			</item>
+			<item>hatboro
+				<tag>Hatboro</tag>
+			</item>
+			<item>haverford
+				<tag>Haverford</tag>
+			</item>
+			<item>highland avenue
+				<tag>Highland Ave</tag>
+			</item>
+			<item>highland
+				<tag>Highland</tag>
+			</item>
+			<item>homesburg junction
+				<tag>Holmesburg Jct</tag>
+			</item>
+			<item>ivy ridge
+				<tag>Ivy Ridge</tag>
+			</item>
+			<item>
+				<one-of>
+					<item>jenkintonw</item>
+					<item>wincoat</item>
+				</one-of>
+				<tag>Jenkintown-Wyncote</tag>
+			</item>
+			<item>langhorn
+				<tag>Langhorne</tag>
+			</item>
+			<item>lansdale
+				<tag>Lansdale</tag>
+			</item>
+			<item>lansdowne
+				<tag>Lansdowne</tag>
+			</item>
+			<item>lawndale
+				<tag>Lawndale</tag>
+			</item>
+			<item>levitown
+				<tag>Levittown</tag>
+			</item>
+			<item>link belt
+				<tag>Link Belt</tag>
+			</item>
+			<item>main street
+				<tag>Main St</tag>
+			</item>
+			<item>malvern
+				<tag>Malvern</tag>
+			</item>
+			<item>manayunk
+				<tag>Manayunk</tag>
+			</item>
+			<item>marcus hook
+				<tag>Marcus Hook</tag>
+			</item>
+			<item>market east
+				<tag>Market East</tag>
+			</item>
+			<item>meadowbrook
+				<tag>Meadowbrook</tag>
+			</item>
+			<item>media
+				<tag>Media</tag>
+			</item>
+			<item>melrose park
+				<tag>Melrose Park</tag>
+			</item>
+			<item>marion
+				<tag>Merion</tag>
+			</item>
+			<item>mickwon
+				<tag>Miquon</tag>
+			</item>
+			<item>morton
+				<tag>Morton</tag>
+			</item>
+			<item>
+				<one-of>
+					<item>moylan</item>
+					<item repeat="0-">rose valley</item>
+				</one-of>
+				<tag>Moylan-Rose Valley</tag>
+			</item>
+			<item>mount airy
+				<tag>Mt Airy</tag>
+			</item>
+			<item>narberth
+				<tag>Narberth</tag>
+			</item>
+			<item>neshaminy falls
+				<tag>Neshaminy Falls</tag>
+			</item>
+			<item>new britain
+				<tag>New Britain</tag>
+			</item>
+			<item>newark
+				<tag>Newark</tag>
+			</item>
+			<item>noble
+				<tag>Noble</tag>
+			</item>
+			<item>
+				<one-of>
+					<item>norrristown</item>
+					<item repeat="0-">tranportation center</item>
+				</one-of>
+				<tag>Norristown TC</tag>
+			</item>
+			<item>
+				<item>north broad</item>
+				<item repeat="0-">street</item>
+				<tag>North Broad St</tag>
+			</item>
+			<item>north hills
+				<tag>North Hills</tag>
+			</item>
+			<item>north philadelphia
+				<tag>North Philadelphia</tag>
+			</item>
+			<item>north wales
+				<tag>North Wales</tag>
+			</item>
+			<item>norwood
+				<tag>Norwood</tag>
+			</item>
+			<item>olney
+				<tag>Olney</tag>
+			</item>
+			<item>orland
+				<tag>Oreland</tag>
+			</item>
+			<item>overbrook
+				<tag>Overbrook</tag>
+			</item>
+			<item>paoli
+				<tag>Paoli</tag>
+			</item>
+			<item>penlin
+				<tag>Penllyn</tag>
+			</item>
+			<item>penbrook
+				<tag>Pennbrook</tag>
+			</item>
+			<item>philmont
+				<tag>Philmont</tag>
+			</item>
+			<item>primos
+				<tag>Primos</tag>
+			</item>
+			<item>prospect park
+				<tag>Prospect Park</tag>
+			</item>
+			<item>queen lane
+				<tag>Queen Lane</tag>
+			</item>
+			<item>randor
+				<tag>Radnor</tag>
+			</item>
+			<item>ridley park
+				<tag>Ridley Park</tag>
+			</item>
+			<item>rosemont
+				<tag>Rosemont</tag>
+			</item>
+			<item>roslyn
+				<tag>Roslyn</tag>
+			</item>
+			<item>rydal
+				<tag>Rydal</tag>
+			</item>
+			<item>riders
+				<tag>Ryers</tag>
+			</item>
+			<item>seacane
+				<tag>Secane</tag>
+			</item>
+			<item>sedgwick
+				<tag>Sedgwick</tag>
+			</item>
+			<item>sharon hill
+				<tag>Sharon Hill</tag>
+			</item>
+			<item>somerton
+				<tag>Somerton</tag>
+			</item>
+			<item>spring hill
+				<tag>Spring Mill</tag>
+			</item>
+			<item>saint davids
+				<tag>Ste. Davids</tag>
+			</item>
+			<item>saint martins
+				<tag>Ste. Martins</tag>
+			</item>
+			<item>stenton
+				<tag>Stenton</tag>
+			</item>
+			<item>staford
+				<tag>Strafford</tag>
+			</item>
+			<item>suburban station
+				<tag>Suburban Station</tag>
+			</item>
+			<item>swarthmore
+				<tag>Swarthmore</tag>
+			</item>
+			<item>tacony
+				<tag>Tacony</tag>
+			</item>
+			<item>
+				<item>temple</item>
+				<item repeat="0-">university</item>
+				<tag>Temple U</tag>
+			</item>
+			<item>thorndale
+				<tag>Thorndale</tag>
+			</item>
+			<item>torresdale
+				<tag>Torresdale</tag>
+			</item>
+			<item>trenton
+				<tag>Trenton</tag>
+			</item>
+			<item>trevose
+				<tag>Trevose</tag>
+			</item>
+			<item>tulpehocken
+				<tag>Tulpehocken</tag>
+			</item>
+			<item>university city
+				<tag>University City</tag>
+			</item>
+			<item>upsal
+				<tag>Upsal</tag>
+			</item>
+			<item>villanova
+				<tag>Villanova</tag>
+			</item>
+			<item>wallingford
+				<tag>Wallingford</tag>
+			</item>
+			<item>warminster
+				<tag>Warminster</tag>
+			</item>
+			<item>washington lane
+				<tag>Washington Lane</tag>
+			</item>
+			<item>wayne junction
+				<tag>Wayne Jct</tag>
+			</item>
+			<item>ayne station
+				<tag>Wayne Station</tag>
+			</item>
+			<item>west trenton
+				<tag>West Trenton</tag>
+			</item>
+			<item>whitford
+				<tag>Whitford</tag>
+			</item>
+			<item>willow grove
+				<tag>Willow Grove</tag>
+			</item>
+			<item>wilmington
+				<tag>Wilmington</tag>
+			</item>
+			<item>wissahickon
+				<tag>Wissahickon</tag>
+			</item>
+			<item>wister
+				<tag>Wister</tag>
+			</item>
+			<item>woodborn
+				<tag>Woodbourne</tag>
+			</item>
+			<item>windmore
+				<tag>Wyndmoor</tag>
+			</item>
+			<item>
+				<item>winfield</item>
+				<one-of>
+					<item>avenue</item>
+					<item>ave</item>
+				</one-of>
+				<tag>Wynnefield Avenue</tag>
+			</item>
+			<item>winwood
+				<tag>Wynnewood</tag>
+			</item>
+			<item>yardley
+				<tag>Yardley</tag>
+			</item>
+		</one-of>
+	</rule>
+	
+</grammar>
