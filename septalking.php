@@ -1,7 +1,7 @@
 <?php
 
 // URL to SEPTA stations grammar.
-$grammar_url = "https://raw.github.com/gist/1180658/8d2f11ce4224d9c77626ec56c1988036e151de6b/septa-stops.xml";
+$grammar_url = "septa-stops.xml";
 
 // Voice to use when rendering TTS.
 $tts_voice = "Victor";
