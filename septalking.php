@@ -25,7 +25,7 @@ function sayDirect($train, $from, $to, $voice) {
 function sayInDirect($train, $from, $to, $voice) {
 
 	// Say connecting station.
-	say("This trip has a connection at " . $train->Connection. ".");
+	say("This trip has a connection at " . $train->Connection. ".", array("voice" => $voice));
 	
 	// Say first leg of trip.
 	say("Originating train " . implode(" ", str_split($train->orig_train)), array("voice" => $voice));
