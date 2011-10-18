@@ -4,7 +4,7 @@
 $nta_base_url = "http://www3.septa.org/hackathon/NextToArrive/";
 
 // URL to SEPTA stations grammar.
-$grammar_url = "septa-stops.xml";
+$grammar_url = "https://raw.github.com/mheadd/septalking/master/septa-stops.xml";
 
 // Voice to use when rendering TTS.
 $tts_voice = "Victor";
@@ -54,6 +54,7 @@ function sayInDirect($template, $train, $from, $to, $voice) {
 // Settings based on channel used.
 $timeout = ($currentCall->channel == "TEXT") ? 60.0 : 10.0;
 $attempts = ($currentCall->channel == "TEXT") ? 1 : 3;
+$choices = ($currentCall->channel == "TEXT") ? "[ANY]" : $grammar_url ;
 
 // Message templates to use when rendering train info. on voice / text channels.
 $voice_template = "Train %train_num%, Leaving from %from% at %departure_time%, arriving at %to% at %arrive_time%, currently running %delay%";
@@ -61,7 +62,7 @@ $text_template = "Train %train_num% from %from% (%departure_time%) to %to% (%arr
 $template = ($currentCall->channel == "TEXT") ? $text_template : $voice_template;
 
 // Options to use when asking the caller for input.
-$options = array("choices" => $grammar_url, "attempts" => $attempts, "bargein" => false, "timeout" => $timeout, "voice" => $tts_voice);
+$options = array("choices" => $choices, "attempts" => $attempts, "bargein" => false, "timeout" => $timeout, "voice" => $tts_voice);
 
 
 if(!$currentCall->initialText) {
@@ -74,14 +75,19 @@ if(!$currentCall->initialText) {
 
 }
 else {
-	$leaving_from = ask("", array("choices" => $grammar_url, "attempts" => $attempts, "bargein" => false, "timeout" => $timeout));
+	$leaving_from = ask("", array("choices" => "[ANY]", "attempts" => $attempts, "bargein" => false, "timeout" => $timeout));
 }
 
 // Get the name of the station the caller is going to
 $going_to = ask("What station are you going to?", $options);
 
+// NTA API requires all station names to be proper cased and URL encoded.
+$departing_station = str_replace(" ", "%20", ucwords($leaving_from->value));
+$arriving_station =  str_replace(" ", "%20", ucwords($going_to->value));
+
+
 // Fetch next to arrive information.
-$url = $nta_base_url . str_replace(" ", "%20", $leaving_from->value) . "/" . str_replace(" ", "%20", $going_to->value)."/$num_trains";
+$url = $nta_base_url . $departing_station . "/" . $arriving_station."/$num_trains";
 $train_info = json_decode(file_get_contents($url));
 
 // Iterate over train info array and return departure information.
