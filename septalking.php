@@ -1,16 +1,19 @@
 <?php
 
 // Base URL for the Next to Arrive API.
-$nta_base_url = "http://www3.septa.org/hackathon/NextToArrive/";
+define("NTA_BASE_URL", "http://www3.septa.org/hackathon/NextToArrive/");
 
 // URL to SEPTA stations grammar.
-$grammar_url = "https://raw.github.com/mheadd/septalking/master/septa-stops.xml";
+define("GRAMMAR_URL", "https://raw.github.com/mheadd/septalking/master/septa-stops.xml");
 
 // Voice to use when rendering TTS.
-$tts_voice = "Victor";
+define("TTS_VOICE_NAME", "Victor");
 
 // Number of train departures to return to user.
-$num_trains = 1;
+define("NUM_TRAINS", 1);
+
+// Confidence level to use for confirming input.
+define("CONFIDENCE_LEVEL", .43);
 
 /**
  * Function to format train information for direct routes.
@@ -51,10 +54,44 @@ function sayInDirect($template, $train, $from, $to, $voice) {
 	
 }
 
+/**
+ * Function to ask caller for station name.
+ */
+function getStationName($prompt, $options) {
+	$station = ask($prompt, $options);
+	
+	if($station->value == 'NO_MATCH') {
+		say("Sorry, I dont recognize that station.", array("voice" => $options["voice"]));
+		getStationName($prompt, $options);
+	}
+	
+	if($station->choice->confidence < CONFIDENCE_LEVEL) {
+		say("I think you said, " . $station->value . ".", array("voice" => $options["voice"]));
+		if(confirmEntry($options["voice"])) {
+			return $station->value;
+		}
+		else {
+			_log("*** Caller rejected recognized input. ***");
+			getStationName($prompt, $options);
+		}
+	}
+	else {
+		return $station->value;
+	}
+}
+
+/**
+ * Helper function to confirm entry.
+ */
+function confirmEntry($voice) {
+	$confirm = ask("Is that correct?", array("choices" => "yes,no", "voice" => $voice));
+	return $confirm->value == "yes" ? true : false;
+}
+
 // Settings based on channel used.
 $timeout = ($currentCall->channel == "TEXT") ? 60.0 : 10.0;
 $attempts = ($currentCall->channel == "TEXT") ? 1 : 3;
-$choices = ($currentCall->channel == "TEXT") ? "[ANY]" : $grammar_url ;
+$choices = ($currentCall->channel == "TEXT") ? "[ANY]" : GRAMMAR_URL ;
 
 // Message templates to use when rendering train info. on voice / text channels.
 $voice_template = "Train %train_num%, Leaving from %from% at %departure_time%, arriving at %to% at %arrive_time%, currently running %delay%";
@@ -62,16 +99,16 @@ $text_template = "Train %train_num% from %from% (%departure_time%) to %to% (%arr
 $template = ($currentCall->channel == "TEXT") ? $text_template : $voice_template;
 
 // Options to use when asking the caller for input.
-$options = array("choices" => $choices, "attempts" => $attempts, "bargein" => false, "timeout" => $timeout, "voice" => $tts_voice);
+$options = array("choices" => $choices, "attempts" => $attempts, "bargein" => false, "timeout" => $timeout, "voice" => TTS_VOICE_NAME);
 
 
 if(!$currentCall->initialText) {
 
 	// Greeting.
-	say("Welcome to sep talking.  Use your voice to catch your train.", array("voice" => $tts_voice));
+	say("Welcome to sep talking.  Use your voice to catch your train.", array("voice" => TTS_VOICE_NAME));
 
 	// Get the name of the station caller is leaving from.
-	$leaving_from = ask("What station are you leaving from?", $options);
+	$leaving_from = getStationName("What station are you leaving from?", $options);
 
 }
 else {
@@ -79,37 +116,37 @@ else {
 }
 
 // Get the name of the station the caller is going to
-$going_to = ask("What station are you going to?", $options);
+$going_to = getStationName("What station are you going to?", $options);
 
 // NTA API requires all station names to be proper cased and URL encoded.
-$departing_station = str_replace(" ", "%20", ucwords($leaving_from->value));
-$arriving_station =  str_replace(" ", "%20", ucwords($going_to->value));
+$departing_station = str_replace(" ", "%20", ucwords($leaving_from));
+$arriving_station =  str_replace(" ", "%20", ucwords($going_to));
 
 
 // Fetch next to arrive information.
-$url = $nta_base_url . $departing_station . "/" . $arriving_station."/$num_trains";
+$url = NTA_BASE_URL . $departing_station . "/" . $arriving_station."/". NUM_TRAINS;
 $train_info = json_decode(file_get_contents($url));
 
 // Iterate over train info array and return departure information.
 if(count($train_info)) {
 	for($i=0; $i < count($train_info); $i++) {
 		if($train_info[$i]->isdirect == "true") {
-			sayDirect($template, $train_info[$i], $leaving_from->value, $going_to->value, $tts_voice);
+			sayDirect($template, $train_info[$i], $leaving_from, $going_to, TTS_VOICE_NAME);
 		}
 		else {
-			sayInDirect($template, $train_info[$i], $leaving_from->value, $going_to->value, $tts_voice);
+			sayInDirect($template, $train_info[$i], $leaving_from, $going_to, TTS_VOICE_NAME);
 		}
 	}
 }
 
 // If an empty array is returned from NTA API.
 else {
-say("I could not find any transit information for those stops.  Please try again later.", array("voice" => $tts_voice));
+	say("I could not find any transit information for trains running from $leaving_from to $going_to.  Please try again later.", array("voice" => TTS_VOICE_NAME));
 }
 
 // Always be polite and say goodbye before hanging up. ;-)
 if($currentCall->channel == "VOICE") {
-	say("Thank you for using sep talking.  Goodbye.", array("voice" => $tts_voice));
+	say("Thank you for using sep talking.  Goodbye.", array("voice" => TTS_VOICE_NAME));
 }
 hangup();
 
