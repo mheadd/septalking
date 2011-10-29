@@ -88,7 +88,7 @@
 			<item>
 				<one-of>
 					<item>chester</item>
-					<item repeat="0-">tranportation center</item>
+					<item repeat="0-">transportation center</item>
 				</one-of>
 				<tag>Chester TC</tag>
 			</item>
@@ -180,7 +180,7 @@
 			<item>
 				<one-of>
 					<item>fern rock</item>
-					<item repeat="0-">tranportation center</item>
+					<item repeat="0-">transportation center</item>
 				</one-of>
 			</item>
 			<item>fernwood
@@ -239,7 +239,7 @@
 			</item>
 			<item>
 				<one-of>
-					<item>jenkintonw</item>
+					<item>jenkintown</item>
 					<item>wincoat</item>
 				</one-of>
 				<tag>Jenkintown-Wyncote</tag>
@@ -323,7 +323,7 @@
 			<item>
 				<one-of>
 					<item>norrristown</item>
-					<item repeat="0-">tranportation center</item>
+					<item repeat="0-">transportation center</item>
 				</one-of>
 				<tag>Norristown TC</tag>
 			</item>
@@ -469,7 +469,7 @@
 			<item>wayne junction
 				<tag>Wayne Jct</tag>
 			</item>
-			<item>ayne station
+			<item>wayne station
 				<tag>Wayne Station</tag>
 			</item>
 			<item>west trenton
