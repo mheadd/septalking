@@ -124,11 +124,13 @@ else {
 	$leaving_from = ask("", array("choices" => "[ANY]", "attempts" => $attempts, "bargein" => false, "timeout" => $timeout));
 }
 
+$leaving = is_object($leaving_from) ? $leaving_from->value : $leaving_from;
+
 // Get the name of the station the caller is going to
 $going_to = getStationName("What station are you going to?", $options);
 
 // NTA API requires all station names to be proper cased and URL encoded.
-$departing_station = is_object($leaving_from) ? formatStationName($leaving_from->value) : formatStationName($leaving_from);
+$departing_station = formatStationName($leaving);
 $arriving_station =  formatStationName($going_to);
 
 // Fetch next to arrive information.
@@ -139,17 +141,16 @@ $train_info = json_decode(file_get_contents($url));
 if(count($train_info) > 0) {
 	for($i=0; $i < count($train_info); $i++) {
 		if($train_info[$i]->isdirect == "true") {
-			sayDirect($template, $train_info[$i], $leaving_from, $going_to, TTS_VOICE_NAME);
+			sayDirect($template, $train_info[$i], $leaving, $going_to, TTS_VOICE_NAME);
 		}
 		else {
-			sayInDirect($template, $train_info[$i], $leaving_from, $going_to, TTS_VOICE_NAME);
+			sayInDirect($template, $train_info[$i], $leaving, $going_to, TTS_VOICE_NAME);
 		}
 	}
 }
 
 // If an empty array is returned from NTA API.
 else {
-	$leaving = is_object($leaving_from) ? $leaving_from->value : $leaving_from;
 	say("I could not find any transit information for trains running from " . $leaving . " to " . $going_to . ".  Please try again later.");
 }
 
