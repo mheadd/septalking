@@ -88,6 +88,14 @@ function confirmEntry($voice) {
 	return $confirm->value == "yes" ? true : false;
 }
 
+/**
+ * Helper function to format station names for NTA API
+ */
+
+function formatStationName($name) {
+	return str_replace(" ", "%20", ucwords($name)); 
+}
+
 // Settings based on channel used.
 $timeout = ($currentCall->channel == "TEXT") ? 60.0 : 10.0;
 $attempts = ($currentCall->channel == "TEXT") ? 1 : 3;
@@ -96,7 +104,8 @@ $choices = ($currentCall->channel == "TEXT") ? "[ANY]" : GRAMMAR_URL ;
 // Message templates to use when rendering train info. on voice / text channels.
 $voice_template = "Train %train_num%, Leaving from %from% at %departure_time%, arriving at %to% at %arrive_time%, currently running %delay%";
 $text_template = "Train %train_num% from %from% (%departure_time%) to %to% (%arrive_time%): %delay%.";
-$template = ($currentCall->channel == "TEXT") ? $text_template : $voice_template;
+//$template = ($currentCall->channel == "TEXT") ? $text_template : $voice_template;
+$template = $voice_template;
 
 // Options to use when asking the caller for input.
 $options = array("choices" => $choices, "attempts" => $attempts, "bargein" => false, "timeout" => $timeout, "voice" => TTS_VOICE_NAME);
@@ -119,16 +128,15 @@ else {
 $going_to = getStationName("What station are you going to?", $options);
 
 // NTA API requires all station names to be proper cased and URL encoded.
-$departing_station = str_replace(" ", "%20", ucwords($leaving_from));
-$arriving_station =  str_replace(" ", "%20", ucwords($going_to));
-
+$departing_station = is_object($leaving_from) ? formatStationName($leaving_from->value) : formatStationName($leaving_from);
+$arriving_station =  formatStationName($going_to);
 
 // Fetch next to arrive information.
 $url = NTA_BASE_URL . $departing_station . "/" . $arriving_station."/". NUM_TRAINS;
 $train_info = json_decode(file_get_contents($url));
 
 // Iterate over train info array and return departure information.
-if(count($train_info)) {
+if(count($train_info) > 0) {
 	for($i=0; $i < count($train_info); $i++) {
 		if($train_info[$i]->isdirect == "true") {
 			sayDirect($template, $train_info[$i], $leaving_from, $going_to, TTS_VOICE_NAME);
@@ -141,7 +149,8 @@ if(count($train_info)) {
 
 // If an empty array is returned from NTA API.
 else {
-	say("I could not find any transit information for trains running from $leaving_from to $going_to.  Please try again later.", array("voice" => TTS_VOICE_NAME));
+	$leaving = is_object($leaving_from) ? $leaving_from->value : $leaving_from;
+	say("I could not find any transit information for trains running from " . $leaving . " to " . $going_to . ".  Please try again later.");
 }
 
 // Always be polite and say goodbye before hanging up. ;-)
