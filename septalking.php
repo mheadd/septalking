@@ -104,8 +104,7 @@ $choices = ($currentCall->channel == "TEXT") ? "[ANY]" : GRAMMAR_URL ;
 // Message templates to use when rendering train info. on voice / text channels.
 $voice_template = "Train %train_num%, Leaving from %from% at %departure_time%, arriving at %to% at %arrive_time%, currently running %delay%";
 $text_template = "Train %train_num% from %from% (%departure_time%) to %to% (%arrive_time%): %delay%.";
-//$template = ($currentCall->channel == "TEXT") ? $text_template : $voice_template;
-$template = $voice_template;
+$template = ($currentCall->channel == "TEXT") ? $text_template : $voice_template;
 
 // Options to use when asking the caller for input.
 $options = array("choices" => $choices, "attempts" => $attempts, "bargein" => false, "timeout" => $timeout, "voice" => TTS_VOICE_NAME);
