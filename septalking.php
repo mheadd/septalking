@@ -65,6 +65,12 @@ function getStationName($prompt, $options) {
 		getStationName($prompt, $options);
 	}
 	
+	// Attempts over.
+	if($station->value == '') {
+		say("Sorry, I did not get your response. Please try again later. Goodbye", array("voice" => $options["voice"]));
+		hangup();
+	}
+	
 	if($station->choice->confidence < CONFIDENCE_LEVEL) {
 		say("I think you said, " . $station->value . ".", array("voice" => $options["voice"]));
 		if(confirmEntry($options["voice"])) {
@@ -150,7 +156,7 @@ if(count($train_info) > 0) {
 
 // If an empty array is returned from NTA API.
 else {
-	say("I could not find any transit information for trains running from " . $leaving . " to " . $going_to . ".  Please try again later.");
+	say("I could not find any transit information for trains running from " . $leaving . " to " . $going_to . ".  Please try again later.",  array("voice" => TTS_VOICE_NAME));
 }
 
 // Always be polite and say goodbye before hanging up. ;-)
