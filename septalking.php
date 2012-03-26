@@ -13,7 +13,7 @@ define("TTS_VOICE_NAME", "Victor");
 define("NUM_TRAINS", 1);
 
 // Confidence level to use for confirming input.
-define("CONFIDENCE_LEVEL", .65);
+define("CONFIDENCE_LEVEL", .43);
 
 /**
  * Function to format train information for direct routes.
@@ -22,10 +22,10 @@ function sayDirect($template, $train, $from, $to, $voice) {
 
 	$delay = ($train->orig_delay == "On time") ? "  on schedule" : $train->orig_delay . " late.";
 	$say = str_replace(
-	array('%train_num%', '%from%', '%departure_time%', '%to%', '%arrive_time%', '%delay%'),
-	array(implode(" ", str_split($train->orig_train)), $from, trim($train->orig_departure_time), $to, trim($train->orig_arrival_time), $delay),
-	$template);
-	say($say, array("voice" => $voice));
+		array('%train_num%', '%from%', '%departure_time%', '%to%', '%arrive_time%', '%delay%'), 
+		array(implode(" ", str_split($train->orig_train)), $from, trim($train->orig_departure_time), $to, trim($train->orig_arrival_time), $delay), 
+		$template);
+	say($say, array("voice" => $voice));	
 }
 
 /**
@@ -35,57 +35,55 @@ function sayInDirect($template, $train, $from, $to, $voice) {
 
 	// Say connecting station.
 	say("This trip has a connection at " . $train->Connection. ".", array("voice" => $voice));
-
+	
 	// Say first leg of trip.
 	$delay = ($train->orig_delay == "On time") ? "  on schedule" : $train->orig_delay . " late.";
-	$say1 = str_replace(
-	array('%train_num%', '%from%', '%departure_time%', '%to%', '%arrive_time%', '%delay%'),
-	array(implode(" ", str_split($train->orig_train)), $from, trim($train->orig_departure_time), $train->Connection, trim($train->orig_arrival_time), $delay),
-	$template);
-	say($say1, array("voice" => $voice));
-
+	$say1 = str_replace( 
+		array('%train_num%', '%from%', '%departure_time%', '%to%', '%arrive_time%', '%delay%'), 
+		array(implode(" ", str_split($train->orig_train)), $from, trim($train->orig_departure_time), $train->Connection, trim($train->orig_arrival_time), $delay), 
+		$template);
+	say($say1, array("voice" => $voice));	
+	
 	// Say second leg of trip.
 	$delay = ($train->term_delay == "On time") ? "  on schedule" : $train->orig_delay . " late.";
-	$say2 = str_replace(
-	array('%train_num%', '%from%', '%departure_time%', '%to%', '%arrive_time%', '%delay%'),
-	array(implode(" ", str_split($train->term_train)), $train->Connection, trim($train->term_depart_time), $to, trim($train->term_arrival_time), $delay),
-	$template);
-	say($say2, array("voice" => $voice));
-
+	$say2 = str_replace( 
+		array('%train_num%', '%from%', '%departure_time%', '%to%', '%arrive_time%', '%delay%'), 
+		array(implode(" ", str_split($train->term_train)), $train->Connection, trim($train->term_depart_time), $to, trim($train->term_arrival_time), $delay), 
+		$template);
+	say($say2, array("voice" => $voice));	
+	
 }
 
 /**
  * Function to ask caller for station name.
  */
-function getStationName($prompt, $options, &$station_name) {
+function getStationName($prompt, $options) {
 	$station = ask($prompt, $options);
-
+	
 	if($station->value == 'NO_MATCH') {
 		say("Sorry, I dont recognize that station.", array("voice" => $options["voice"]));
 		getStationName($prompt, $options);
 	}
-
+	
 	// Attempts over.
-	elseif($station->value == '') {
+	if($station->value == '') {
 		say("Sorry, I did not get your response. Please try again later. Goodbye", array("voice" => $options["voice"]));
 		hangup();
 	}
-
-	else {
-		if($station->choice->confidence < CONFIDENCE_LEVEL) {
-			say("I think you said, " . $station->value . ".", array("voice" => $options["voice"]));
-			if(confirmEntry($options["voice"])) {
-				$station_name = $station->value;
-			}
-			else {
-				_log("*** Caller rejected recognized input. ***");
-				getStationName($prompt, $options, &$station_name);
-			}
-		}
-		$station_name = $station->value;
-	}
 	
-	return;
+	if($station->choice->confidence < CONFIDENCE_LEVEL) {
+		say("I think you said, " . $station->value . ".", array("voice" => $options["voice"]));
+		if(confirmEntry($options["voice"])) {
+			return $station->value;
+		}
+		else {
+			_log("*** Caller rejected recognized input. ***");
+			getStationName($prompt, $options);
+		}
+	}
+	else {
+		return $station->value;
+	}
 }
 
 /**
@@ -101,7 +99,7 @@ function confirmEntry($voice) {
  */
 
 function formatStationName($name) {
-	return str_replace(" ", "%20", ucwords($name));
+	return str_replace(" ", "%20", ucwords($name)); 
 }
 
 // Settings based on channel used.
@@ -124,7 +122,7 @@ if(!$currentCall->initialText) {
 	say("Welcome to sep talking.  Use your voice to catch your train.", array("voice" => TTS_VOICE_NAME));
 
 	// Get the name of the station caller is leaving from.
-	getStationName("What station are you leaving from?", $options, $leaving_from);
+	$leaving_from = getStationName("What station are you leaving from?", $options);
 
 }
 else {
