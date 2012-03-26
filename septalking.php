@@ -74,17 +74,14 @@ function getStationName($prompt, $options) {
 	if($station->choice->confidence < CONFIDENCE_LEVEL) {
 		say("I think you said, " . $station->value . ".", array("voice" => $options["voice"]));
 		if(confirmEntry($options["voice"])) {
-			_log("*** Returning: ". $station->value ." ***");
 			return $station->value;
 		}
 		else {
 			_log("*** Caller rejected recognized input. ***");
-			unset($station);
 			getStationName($prompt, $options);
 		}
 	}
 	else {
-		_log("*** Returning: ". $station->value ." ***");
 		return $station->value;
 	}
 }
