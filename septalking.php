@@ -70,6 +70,9 @@ function getStationName($prompt, $options) {
 		say("Sorry, I did not get your response. Please try again later. Goodbye", array("voice" => $options["voice"]));
 		hangup();
 	}
+	else {
+		_log("*** Recognized: ". $station->value ." ***");
+	}
 	
 	if($station->choice->confidence < CONFIDENCE_LEVEL) {
 		say("I think you said, " . $station->value . ".", array("voice" => $options["voice"]));
