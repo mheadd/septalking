@@ -13,7 +13,7 @@ define("TTS_VOICE_NAME", "Victor");
 define("NUM_TRAINS", 1);
 
 // Confidence level to use for confirming input.
-define("CONFIDENCE_LEVEL", .43);
+define("CONFIDENCE_LEVEL", .65);
 
 /**
  * Function to format train information for direct routes.
