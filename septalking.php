@@ -22,10 +22,10 @@ function sayDirect($template, $train, $from, $to, $voice) {
 
 	$delay = ($train->orig_delay == "On time") ? "  on schedule" : $train->orig_delay . " late.";
 	$say = str_replace(
-		array('%train_num%', '%from%', '%departure_time%', '%to%', '%arrive_time%', '%delay%'), 
-		array(implode(" ", str_split($train->orig_train)), $from, trim($train->orig_departure_time), $to, trim($train->orig_arrival_time), $delay), 
-		$template);
-	say($say, array("voice" => $voice));	
+	array('%train_num%', '%from%', '%departure_time%', '%to%', '%arrive_time%', '%delay%'),
+	array(implode(" ", str_split($train->orig_train)), $from, trim($train->orig_departure_time), $to, trim($train->orig_arrival_time), $delay),
+	$template);
+	say($say, array("voice" => $voice));
 }
 
 /**
@@ -35,23 +35,23 @@ function sayInDirect($template, $train, $from, $to, $voice) {
 
 	// Say connecting station.
 	say("This trip has a connection at " . $train->Connection. ".", array("voice" => $voice));
-	
+
 	// Say first leg of trip.
 	$delay = ($train->orig_delay == "On time") ? "  on schedule" : $train->orig_delay . " late.";
-	$say1 = str_replace( 
-		array('%train_num%', '%from%', '%departure_time%', '%to%', '%arrive_time%', '%delay%'), 
-		array(implode(" ", str_split($train->orig_train)), $from, trim($train->orig_departure_time), $train->Connection, trim($train->orig_arrival_time), $delay), 
-		$template);
-	say($say1, array("voice" => $voice));	
-	
+	$say1 = str_replace(
+	array('%train_num%', '%from%', '%departure_time%', '%to%', '%arrive_time%', '%delay%'),
+	array(implode(" ", str_split($train->orig_train)), $from, trim($train->orig_departure_time), $train->Connection, trim($train->orig_arrival_time), $delay),
+	$template);
+	say($say1, array("voice" => $voice));
+
 	// Say second leg of trip.
 	$delay = ($train->term_delay == "On time") ? "  on schedule" : $train->orig_delay . " late.";
-	$say2 = str_replace( 
-		array('%train_num%', '%from%', '%departure_time%', '%to%', '%arrive_time%', '%delay%'), 
-		array(implode(" ", str_split($train->term_train)), $train->Connection, trim($train->term_depart_time), $to, trim($train->term_arrival_time), $delay), 
-		$template);
-	say($say2, array("voice" => $voice));	
-	
+	$say2 = str_replace(
+	array('%train_num%', '%from%', '%departure_time%', '%to%', '%arrive_time%', '%delay%'),
+	array(implode(" ", str_split($train->term_train)), $train->Connection, trim($train->term_depart_time), $to, trim($train->term_arrival_time), $delay),
+	$template);
+	say($say2, array("voice" => $voice));
+
 }
 
 /**
@@ -59,29 +59,29 @@ function sayInDirect($template, $train, $from, $to, $voice) {
  */
 function getStationName($prompt, $options) {
 	$station = ask($prompt, $options);
-	
+
 	if($station->value == 'NO_MATCH') {
 		say("Sorry, I dont recognize that station.", array("voice" => $options["voice"]));
 		getStationName($prompt, $options);
 	}
-	
+
 	// Attempts over.
-	if($station->value == '') {
+	elseif($station->value == '') {
 		say("Sorry, I did not get your response. Please try again later. Goodbye", array("voice" => $options["voice"]));
 		hangup();
 	}
-	
-	if($station->choice->confidence < CONFIDENCE_LEVEL) {
-		say("I think you said, " . $station->value . ".", array("voice" => $options["voice"]));
-		if(confirmEntry($options["voice"])) {
-			return $station->value;
-		}
-		else {
-			_log("*** Caller rejected recognized input. ***");
-			getStationName($prompt, $options);
-		}
-	}
+
 	else {
+		if($station->choice->confidence < CONFIDENCE_LEVEL) {
+			say("I think you said, " . $station->value . ".", array("voice" => $options["voice"]));
+			if(confirmEntry($options["voice"])) {
+				return $station->value;
+			}
+			else {
+				_log("*** Caller rejected recognized input. ***");
+				getStationName($prompt, $options);
+			}
+		}
 		return $station->value;
 	}
 }
@@ -99,7 +99,7 @@ function confirmEntry($voice) {
  */
 
 function formatStationName($name) {
-	return str_replace(" ", "%20", ucwords($name)); 
+	return str_replace(" ", "%20", ucwords($name));
 }
 
 // Settings based on channel used.
