@@ -79,6 +79,7 @@ function getStationName($prompt, $options) {
 			}
 			else {
 				_log("*** Caller rejected recognized input. ***");
+				unset($station);
 				getStationName($prompt, $options);
 			}
 		}
