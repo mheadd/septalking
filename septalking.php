@@ -57,7 +57,7 @@ function sayInDirect($template, $train, $from, $to, $voice) {
 /**
  * Function to ask caller for station name.
  */
-function getStationName($prompt, $options) {
+function getStationName($prompt, $options, &$station_name) {
 	$station = ask($prompt, $options);
 
 	if($station->value == 'NO_MATCH') {
@@ -75,15 +75,17 @@ function getStationName($prompt, $options) {
 		if($station->choice->confidence < CONFIDENCE_LEVEL) {
 			say("I think you said, " . $station->value . ".", array("voice" => $options["voice"]));
 			if(confirmEntry($options["voice"])) {
-				return $station->value;
+				$station_name = $station->value;
 			}
 			else {
 				_log("*** Caller rejected recognized input. ***");
-				getStationName($prompt, $options);
+				getStationName($prompt, $options, &$station_name);
 			}
 		}
-		return $station->value;
+		$station_name = $station->value;
 	}
+	
+	return;
 }
 
 /**
@@ -122,7 +124,7 @@ if(!$currentCall->initialText) {
 	say("Welcome to sep talking.  Use your voice to catch your train.", array("voice" => TTS_VOICE_NAME));
 
 	// Get the name of the station caller is leaving from.
-	$leaving_from = getStationName("What station are you leaving from?", $options);
+	getStationName("What station are you leaving from?", $options, $leaving_from);
 
 }
 else {
