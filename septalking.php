@@ -62,7 +62,7 @@ function getStationName($prompt, $options) {
 	
 	if($station->value == 'NO_MATCH') {
 		say("Sorry, I dont recognize that station.", array("voice" => $options["voice"]));
-		getStationName($prompt, $options);
+		return getStationName($prompt, $options);
 	}
 	
 	// Attempts over.
@@ -78,7 +78,7 @@ function getStationName($prompt, $options) {
 		}
 		else {
 			_log("*** Caller rejected recognized input. ***");
-			getStationName($prompt, $options);
+			return getStationName($prompt, $options);
 		}
 	}
 	else {
