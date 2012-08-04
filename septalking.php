@@ -161,7 +161,7 @@ if(count($train_info) > 0) {
 
 	// Look up coordinates of departing regional rail station.
 	if($currentCall->channel == "VOICE") {
-		say("Please hold on to hear the closest sales location.");
+		say("Please hold on to hear the closest sales location.", array("voice" => TTS_VOICE_NAME));
 	}
 	
 	$coordinates = json_decode(file_get_contents(COORDINATES_BASE_URL . '?station_name=' . $departing_station));
@@ -170,10 +170,10 @@ if(count($train_info) > 0) {
 	$locations = json_decode(file_get_contents(LOCATION_BASE_URL . '?lon=' . $coordinates->stop_lon . '&lat=' . $coordinates->stop_lat . '&radius=1&type=sales_locations'));
 	
 	// Say details of closest sales location.
-	$closest_location = $locations[0]->location_name;
+	$closest_location = $locations[0]->location_data->location_name . '.' . $locations[0]->location_data->address1 . '.' . $locations[0]->location_data->city;
 	
 	if($currentCall->channel == "VOICE") {
-		say('The closest sales location to your departing station is, ' . $closest_location);
+		say('The closest sales location to your departing station is, ' . $closest_location, array("voice" => TTS_VOICE_NAME));
 	}
 	else {
 		say('Buy tickets here: ' . $closest_location);
