@@ -13,7 +13,7 @@ define("LOCATION_BASE_URL", "http://www3.septa.org/hackathon/locations/get_locat
 define("GRAMMAR_URL", "https://raw.github.com/mheadd/septalking/master/septa-stops.xml");
 
 // Voice to use when rendering TTS.
-define("TTS_VOICE_NAME", "Susan");
+define("TTS_VOICE_NAME", "Veronica");
 
 // Number of train departures to return to user.
 define("NUM_TRAINS", 1);
@@ -167,7 +167,7 @@ if(count($train_info) > 0) {
 	$coordinates = json_decode(file_get_contents(COORDINATES_BASE_URL . '?station_name=' . $departing_station));
 
 	// Look up sales locations near departing regional rail station.
-	$locations = json_decode(file_get_contents(LOCATION_BASE_URL . '?lon=' . $coordinates->stop_lon . '&lat=' . $coordinates->stop_lat . '&radius=1&type=sales_locations'));
+	$locations = json_decode(file_get_contents(LOCATION_BASE_URL . '?lon=' . $coordinates->stop_lon . '&lat=' . $coordinates->stop_lat . '&radius=5&type=sales_locations'));
 	
 	// Say details of closest sales location.
 	$closest_location = $locations[0]->location_data->location_name . '. ' . $locations[0]->location_data->address1 . '. ' . $locations[0]->location_data->city;
