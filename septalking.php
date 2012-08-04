@@ -3,11 +3,17 @@
 // Base URL for the Next to Arrive API.
 define("NTA_BASE_URL", "http://www3.septa.org/hackathon/NextToArrive/");
 
+// Base URL for Coordinates API.
+define("COORDINATES_BASE_URL", "http://setpalocations.phpfogapp.com/index.php");
+
+// Base URL for the System Location API.
+define("LOCATION_BASE_URL", "http://www3.septa.org/hackathon/locations/get_locations.php");
+
 // URL to SEPTA stations grammar.
 define("GRAMMAR_URL", "https://raw.github.com/mheadd/septalking/master/septa-stops.xml");
 
 // Voice to use when rendering TTS.
-define("TTS_VOICE_NAME", "Victor");
+define("TTS_VOICE_NAME", "Vanessa");
 
 // Number of train departures to return to user.
 define("NUM_TRAINS", 1);
@@ -22,10 +28,10 @@ function sayDirect($template, $train, $from, $to, $voice) {
 
 	$delay = ($train->orig_delay == "On time") ? "  on schedule" : $train->orig_delay . " late.";
 	$say = str_replace(
-		array('%train_num%', '%from%', '%departure_time%', '%to%', '%arrive_time%', '%delay%'), 
-		array(implode(" ", str_split($train->orig_train)), $from, trim($train->orig_departure_time), $to, trim($train->orig_arrival_time), $delay), 
-		$template);
-	say($say, array("voice" => $voice));	
+	array('%train_num%', '%from%', '%departure_time%', '%to%', '%arrive_time%', '%delay%'),
+	array(implode(" ", str_split($train->orig_train)), $from, trim($train->orig_departure_time), $to, trim($train->orig_arrival_time), $delay),
+	$template);
+	say($say, array("voice" => $voice));
 }
 
 /**
@@ -35,23 +41,23 @@ function sayInDirect($template, $train, $from, $to, $voice) {
 
 	// Say connecting station.
 	say("This trip has a connection at " . $train->Connection. ".", array("voice" => $voice));
-	
+
 	// Say first leg of trip.
 	$delay = ($train->orig_delay == "On time") ? "  on schedule" : $train->orig_delay . " late.";
-	$say1 = str_replace( 
-		array('%train_num%', '%from%', '%departure_time%', '%to%', '%arrive_time%', '%delay%'), 
-		array(implode(" ", str_split($train->orig_train)), $from, trim($train->orig_departure_time), $train->Connection, trim($train->orig_arrival_time), $delay), 
-		$template);
-	say($say1, array("voice" => $voice));	
-	
+	$say1 = str_replace(
+	array('%train_num%', '%from%', '%departure_time%', '%to%', '%arrive_time%', '%delay%'),
+	array(implode(" ", str_split($train->orig_train)), $from, trim($train->orig_departure_time), $train->Connection, trim($train->orig_arrival_time), $delay),
+	$template);
+	say($say1, array("voice" => $voice));
+
 	// Say second leg of trip.
 	$delay = ($train->term_delay == "On time") ? "  on schedule" : $train->orig_delay . " late.";
-	$say2 = str_replace( 
-		array('%train_num%', '%from%', '%departure_time%', '%to%', '%arrive_time%', '%delay%'), 
-		array(implode(" ", str_split($train->term_train)), $train->Connection, trim($train->term_depart_time), $to, trim($train->term_arrival_time), $delay), 
-		$template);
-	say($say2, array("voice" => $voice));	
-	
+	$say2 = str_replace(
+	array('%train_num%', '%from%', '%departure_time%', '%to%', '%arrive_time%', '%delay%'),
+	array(implode(" ", str_split($train->term_train)), $train->Connection, trim($train->term_depart_time), $to, trim($train->term_arrival_time), $delay),
+	$template);
+	say($say2, array("voice" => $voice));
+
 }
 
 /**
@@ -59,18 +65,18 @@ function sayInDirect($template, $train, $from, $to, $voice) {
  */
 function getStationName($prompt, $options) {
 	$station = ask($prompt, $options);
-	
+
 	if($station->value == 'NO_MATCH') {
 		say("Sorry, I dont recognize that station.", array("voice" => $options["voice"]));
 		return getStationName($prompt, $options);
 	}
-	
+
 	// Attempts over.
 	if($station->value == '') {
 		say("Sorry, I did not get your response. Please try again later. Goodbye", array("voice" => $options["voice"]));
 		hangup();
 	}
-	
+
 	if($station->choice->confidence < CONFIDENCE_LEVEL) {
 		say("I think you said, " . $station->value . ".", array("voice" => $options["voice"]));
 		if(confirmEntry($options["voice"])) {
@@ -99,7 +105,7 @@ function confirmEntry($voice) {
  */
 
 function formatStationName($name) {
-	return str_replace(" ", "%20", ucwords($name)); 
+	return str_replace(" ", "%20", ucwords($name));
 }
 
 // Settings based on channel used.
@@ -139,11 +145,11 @@ $departing_station = formatStationName($leaving);
 $arriving_station =  formatStationName($going_to);
 
 // Fetch next to arrive information.
-$url = NTA_BASE_URL . $departing_station . "/" . $arriving_station."/". NUM_TRAINS;
-$train_info = json_decode(file_get_contents($url));
+$train_info = json_decode(file_get_contents(NTA_BASE_URL . $departing_station . "/" . $arriving_station."/". NUM_TRAINS));
 
 // Iterate over train info array and return departure information.
 if(count($train_info) > 0) {
+	
 	for($i=0; $i < count($train_info); $i++) {
 		if($train_info[$i]->isdirect == "true") {
 			sayDirect($template, $train_info[$i], $leaving, $going_to, TTS_VOICE_NAME);
@@ -152,6 +158,23 @@ if(count($train_info) > 0) {
 			sayInDirect($template, $train_info[$i], $leaving, $going_to, TTS_VOICE_NAME);
 		}
 	}
+
+	// Look up coordinates of departing regional rail station.
+	$coordinates = json_decode(file_get_contents(COORDINATES_BASE_URL . '?station_name=' . $departing_station));
+
+	// Look up sales locations near departing regional rail station.
+	$locations = json_decode(file_get_contents(LOCATION_BASE_URL . '?lon=' . $coordinates->stop_lon . '&lat=' . $coordinates->stop_lat . '&radius=1&type=sales_locations'));
+	
+	// Say details of closest sales location.
+	$closest_location = $locations->location_data->location_name;
+	
+	if($currentCall->channel == "VOICE") {
+		say('The closest sales location to your departing station is, ' . $closest_location);
+	}
+	else {
+		say('Buy tickets here: ' . $closest_location);
+	}
+
 }
 
 // If an empty array is returned from NTA API.
