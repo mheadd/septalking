@@ -13,7 +13,7 @@ define("LOCATION_BASE_URL", "http://www3.septa.org/hackathon/locations/get_locat
 define("GRAMMAR_URL", "https://raw.github.com/mheadd/septalking/master/septa-stops.xml");
 
 // Voice to use when rendering TTS.
-define("TTS_VOICE_NAME", "Veronica");
+define("TTS_VOICE_NAME", "Susan");
 
 // Number of train departures to return to user.
 define("NUM_TRAINS", 1);
@@ -161,7 +161,7 @@ if(count($train_info) > 0) {
 
 	// Look up coordinates of departing regional rail station.
 	if($currentCall->channel == "VOICE") {
-		say("Please hold on to hear the closest sales location.", array("voice" => TTS_VOICE_NAME));
+		say(".Please hold on to hear the closest sales location.", array("voice" => TTS_VOICE_NAME));
 	}
 	
 	$coordinates = json_decode(file_get_contents(COORDINATES_BASE_URL . '?station_name=' . $departing_station));
@@ -170,13 +170,13 @@ if(count($train_info) > 0) {
 	$locations = json_decode(file_get_contents(LOCATION_BASE_URL . '?lon=' . $coordinates->stop_lon . '&lat=' . $coordinates->stop_lat . '&radius=1&type=sales_locations'));
 	
 	// Say details of closest sales location.
-	$closest_location = $locations[0]->location_data->location_name . '.' . $locations[0]->location_data->address1 . '.' . $locations[0]->location_data->city;
+	$closest_location = $locations[0]->location_data->location_name . '. ' . $locations[0]->location_data->address1 . '. ' . $locations[0]->location_data->city;
 	
 	if($currentCall->channel == "VOICE") {
 		say('The closest sales location to your departing station is, ' . $closest_location, array("voice" => TTS_VOICE_NAME));
 	}
 	else {
-		say('Buy tickets here: ' . $closest_location);
+		say('Buy tickets at ' . $closest_location);
 	}
 
 }
