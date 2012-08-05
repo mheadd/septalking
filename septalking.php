@@ -18,8 +18,18 @@ define("TTS_VOICE_NAME", "Veronica");
 // Number of train departures to return to user.
 define("NUM_TRAINS", 1);
 
+// Radius to search for SEPTA Sales locations.
+define("SEARCH_RADIUS", 5);
+
 // Confidence level to use for confirming input.
 define("CONFIDENCE_LEVEL", .43);
+
+/**
+ * Function to make external API call.
+ */
+function getJSON($url) {
+	return json_decode(file_get_contents($url)); 
+}
 
 /**
  * Function to format train information for direct routes.
@@ -145,7 +155,7 @@ $departing_station = formatStationName($leaving);
 $arriving_station =  formatStationName($going_to);
 
 // Fetch next to arrive information.
-$train_info = json_decode(file_get_contents(NTA_BASE_URL . $departing_station . "/" . $arriving_station."/". NUM_TRAINS));
+$train_info = getJSON(NTA_BASE_URL . $departing_station . "/" . $arriving_station."/". NUM_TRAINS);
 
 // Iterate over train info array and return departure information.
 if(count($train_info) > 0) {
@@ -162,15 +172,15 @@ if(count($train_info) > 0) {
 	// Look up coordinates of departing regional rail station.
 	if($currentCall->channel == "VOICE") {
 		say(".Please hold on to hear the closest sales location.", array("voice" => TTS_VOICE_NAME));
-	}
-	
-	$coordinates = json_decode(file_get_contents(COORDINATES_BASE_URL . '?station_name=' . $departing_station));
+	}	
+	$coordinates = getJSON(COORDINATES_BASE_URL . '?station_name=' . $departing_station);
 
 	// Look up sales locations near departing regional rail station.
-	$locations = json_decode(file_get_contents(LOCATION_BASE_URL . '?lon=' . $coordinates->stop_lon . '&lat=' . $coordinates->stop_lat . '&radius=5&type=sales_locations'));
+	$locations = getJSON(LOCATION_BASE_URL . '?lon=' . $coordinates->stop_lon . '&lat=' . $coordinates->stop_lat . '&radius=' . SEARCH_RADIUS . '&type=sales_locations');
 	
 	// Say details of closest sales location.
-	$closest_location = $locations[0]->location_data->location_name . '. ' . $locations[0]->location_data->address1 . '. ' . $locations[0]->location_data->city;
+	$closest_location = $locations[0]->location_data;
+	$closest_location->location_name . ', ' . $closest_location->address1 . ', ' . $closest_location->city . ', ' . $closest_location->state;
 	
 	if($currentCall->channel == "VOICE") {
 		say('The closest sales location to your departing station is, ' . $closest_location, array("voice" => TTS_VOICE_NAME));
