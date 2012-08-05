@@ -179,8 +179,7 @@ if(count($train_info) > 0) {
 	$locations = getJSON(LOCATION_BASE_URL . '?lon=' . $coordinates->stop_lon . '&lat=' . $coordinates->stop_lat . '&radius=' . SEARCH_RADIUS . '&type=sales_locations');
 	
 	// Say details of closest sales location.
-	$closest_location = $locations[0]->location_data;
-	$closest_location->location_name . ', ' . $closest_location->address1 . ', ' . $closest_location->city . ', ' . $closest_location->state;
+	$closest_location = $locations[0]->location_data->location_name . '. ' . $locations[0]->location_data->address1 . ', ' . $locations[0]->location_data->city . ', ' . $locations[0]->location_data->state;
 	
 	if($currentCall->channel == "VOICE") {
 		say('The closest sales location to your departing station is, ' . $closest_location, array("voice" => TTS_VOICE_NAME));
