@@ -2,7 +2,7 @@
 <grammar xmlns="http://www.w3.org/2001/06/grammar" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.w3.org/2001/06/grammar http://www.w3.org/TR/speech-grammar/grammar.xsd"
 	version="1.0" xml:lang="en-US" mode="voice" root="main">
-
+	
 	<rule id="main">
 		<one-of>
 			<item>
@@ -13,24 +13,15 @@
 			<item>
 				forty ninth street
 				<tag>49th St</tag>
-			</item>
-			<item>airport terminal a
-				<tag>Airport Terminal A</tag>
-			</item>
-			<item>airport terminal b
-				<tag>Airport Terminal B</tag>
-			</item>
-			<item>airport terminal c
-				<tag>Airport Terminal C-D</tag>
-			</item>
-			<item>airport terminal d
-				<tag>Airport Terminal C-D</tag>
-			</item>
-			<item>airport terminal e
-				<tag>Airport Terminal E-F</tag>
-			</item>
-			<item>airport terminal f
-				<tag>Airport Terminal E-F</tag>
+			</item>			
+			<item>
+				<item repeat="0-">airport</item>
+				<item>terminal a<tag>Airport Terminal A</tag></item>
+				<item>terminal b<tag>Airport Terminal B</tag></item>
+				<item>terminal c<tag>Airport Terminal C-D</tag></item>
+				<item>terminal d<tag>Airport Terminal C-D</tag></item>
+				<item>terminal e<tag>Airport Terminal E-F</tag></item>
+				<item>terminal f<tag>Airport Terminal E-F</tag></item>
 			</item>
 			<item>allegheny
 				<tag>Allegheny</tag>
