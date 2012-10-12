@@ -7,7 +7,7 @@ define("NTA_BASE_URL", "http://www3.septa.org/hackathon/NextToArrive/");
 define("GRAMMAR_URL", "https://raw.github.com/mheadd/septalking/master/septa-stops.xml");
 
 // Voice to use when rendering TTS.
-define("TTS_VOICE_NAME", "Vanessa");
+define("TTS_VOICE_NAME", "Veronica");
 
 // Number of train departures to return to user.
 define("NUM_TRAINS", 1);
@@ -163,6 +163,9 @@ else {
 if($currentCall->channel == "VOICE") {
 	say("Thank you for using sep talking.  Goodbye.", array("voice" => TTS_VOICE_NAME));
 }
+
+_log('***** ' . $currentCall->callerID . '|' . $currentCall->channel . '|' . $leaving . '|' . $going_to . ' *****');
+
 hangup();
 
 ?>
