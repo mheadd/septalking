@@ -7,7 +7,7 @@ define("NTA_BASE_URL", "http://www3.septa.org/hackathon/NextToArrive/");
 define("GRAMMAR_URL", "https://raw.github.com/mheadd/septalking/master/septa-stops.xml");
 
 // Voice to use when rendering TTS.
-define("TTS_VOICE_NAME", "Victor");
+define("TTS_VOICE_NAME", "Vanessa");
 
 // Number of train departures to return to user.
 define("NUM_TRAINS", 1);
