@@ -12,3 +12,4 @@ SEPTAlking uses the W3C standard for speech recognition - SRGS grammars - and th
 
 This project is 100% open source.  Please fork, experiment and improve!
 
+Note - this is the development branch. ALl functionality may not be incorporated into the master branch.
