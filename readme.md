@@ -1,6 +1,8 @@
 SEPTAlking
 =========
 
+Note - the SEPTAlking service was discontinued on March 15, 2013 and I'm not actively maintaining this codebase any longer.
+
 SEPTAlking is a telephone / SMS application that lets you find departure times for SEPTA Regional Rail trains.
 
 This project was developed as part of the first Apps for SEPTA civic hackathon in 2011. Improvements & enhancements added at the Apps for SETPTA: Reloaded! civic hackathon in 2012.
